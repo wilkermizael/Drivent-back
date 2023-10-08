@@ -1,0 +1,295 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "driven.t",
+    "dateExported": "2023-09-23T00:06:20.194Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "67b73caf-f59b-406c-bb43-30651deedfb2",
+            "name": "auth",
+            "containerId": "",
+            "created": "2023-09-08T17:52:53.289Z",
+            "sortNum": 5000
+        },
+        {
+            "_id": "6e3b3dcf-04ca-4a22-ac42-3dd68d5d2d58",
+            "name": "user",
+            "containerId": "",
+            "created": "2023-09-01T17:52:52.650Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "7d1a8438-9220-42e1-b06a-26a9ccfa30fb",
+            "name": "event",
+            "containerId": "",
+            "created": "2023-09-08T18:03:39.902Z",
+            "sortNum": 30000
+        },
+        {
+            "_id": "464196d6-726a-4809-a323-003113cba693",
+            "name": "enrolments",
+            "containerId": "",
+            "created": "2023-09-08T18:04:31.935Z",
+            "sortNum": 40000
+        },
+        {
+            "_id": "a254f4fa-36ed-478f-b9a2-8a20bb4169ae",
+            "name": "ticket",
+            "containerId": "",
+            "created": "2023-09-18T18:56:25.545Z",
+            "sortNum": 50000
+        },
+        {
+            "_id": "44799f99-a0da-4860-ad49-154f31748a29",
+            "name": "payments",
+            "containerId": "",
+            "created": "2023-09-18T19:16:13.806Z",
+            "sortNum": 60000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "6018c8bd-372b-42cc-94d6-e1bf5891d7e4",
+            "colId": "ad5be4c3-25d8-4743-b784-d5054745f09b",
+            "containerId": "6e3b3dcf-04ca-4a22-ac42-3dd68d5d2d58",
+            "name": "create-user",
+            "url": "localhost:4000/users/",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-09-01T17:53:06.769Z",
+            "modified": "2023-09-18T18:58:04.371Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"let@let.com.br\",\n  \"password\": \"123456\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "a62e5dcf-5b6a-402d-b2a0-2b19c6ba2b43",
+            "colId": "ad5be4c3-25d8-4743-b784-d5054745f09b",
+            "containerId": "44799f99-a0da-4860-ad49-154f31748a29",
+            "name": "get-payments",
+            "url": "localhost:4000/payments?ticketId=122",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-09-18T19:17:50.834Z",
+            "modified": "2023-09-18T19:25:12.664Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer {{token}}"
+                }
+            ],
+            "params": [
+                {
+                    "name": "ticketId",
+                    "value": "122",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "19a420b7-d321-45d8-be92-357399ae39a5",
+            "colId": "ad5be4c3-25d8-4743-b784-d5054745f09b",
+            "containerId": "",
+            "name": "health",
+            "url": "localhost:4000/health",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-09-08T14:25:31.832Z",
+            "modified": "2023-09-08T14:25:41.331Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "15e444bb-c364-4d94-99eb-b43492cc340e",
+            "colId": "ad5be4c3-25d8-4743-b784-d5054745f09b",
+            "containerId": "44799f99-a0da-4860-ad49-154f31748a29",
+            "name": "pay",
+            "url": "localhost:4000/payments/process",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-09-18T19:19:13.731Z",
+            "modified": "2023-09-18T19:24:38.250Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer {{token}}"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n\t\"ticketId\": 122,\n\t\"cardData\": {\n\t\t\"issuer\": \"VISA\",\n    \"number\": 1234123412341234,\n    \"name\": \"Letícia\",\n    \"expirationDate\": \"2024-03-03\",\n    \"cvv\": 123\n\t}\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "30b6477c-ffbd-4e8f-bc17-d5c86f7dab2f",
+            "colId": "ad5be4c3-25d8-4743-b784-d5054745f09b",
+            "containerId": "67b73caf-f59b-406c-bb43-30651deedfb2",
+            "name": "sign-in",
+            "url": "localhost:4000/auth/sign-in",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2023-09-08T17:53:41.642Z",
+            "modified": "2023-09-18T18:57:55.444Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"let@let.com.br\",\n  \"password\": \"123456\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "c62b2fbb-9e12-4339-8832-eb33157edf3c",
+            "colId": "ad5be4c3-25d8-4743-b784-d5054745f09b",
+            "containerId": "7d1a8438-9220-42e1-b06a-26a9ccfa30fb",
+            "name": "get-event",
+            "url": "localhost:4000/event/",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2023-09-08T18:03:54.204Z",
+            "modified": "2023-09-08T18:04:05.816Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "091531af-40bf-4aeb-b251-d46f552d5f61",
+            "colId": "ad5be4c3-25d8-4743-b784-d5054745f09b",
+            "containerId": "464196d6-726a-4809-a323-003113cba693",
+            "name": "get-cep",
+            "url": "localhost:4000/enrollments/cep?cep=83708132",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2023-09-08T18:05:25.526Z",
+            "modified": "2023-09-18T23:31:50.386Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "cep",
+                    "value": "83708132",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "bfbdceb9-e8fe-4582-86f3-e8ba124ee309",
+            "colId": "ad5be4c3-25d8-4743-b784-d5054745f09b",
+            "containerId": "464196d6-726a-4809-a323-003113cba693",
+            "name": "get-enrollment",
+            "url": "localhost:4000/enrollments/",
+            "method": "GET",
+            "sortNum": 70000,
+            "created": "2023-09-08T18:06:17.703Z",
+            "modified": "2023-09-18T23:37:08.996Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer {{token}}"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "c5ea22fd-d36d-4151-9a3d-af7a9433cb8a",
+            "colId": "ad5be4c3-25d8-4743-b784-d5054745f09b",
+            "containerId": "464196d6-726a-4809-a323-003113cba693",
+            "name": "upsert-enrollment",
+            "url": "localhost:4000/enrollments/",
+            "method": "POST",
+            "sortNum": 80000,
+            "created": "2023-09-08T18:07:15.535Z",
+            "modified": "2023-09-18T19:10:38.812Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer {{token}}"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"Letícia Chijo\",\n  \"cpf\": \"42001608896\",\n  \"birthday\": \"1994-03-03\",\n  \"phone\": \"(11) 98888-8888\",\n  \"address\": {\n    \"cep\": \"60743-705\",\n    \"street\": \"Rua 4\",\n    \"city\": \"Fortaleza\",\n    \"state\": \"CE\",\n    \"number\": \"123\",\n    \"neighborhood\": \"Passaré\",\n    \"addressDetail\": \"Apto 4\"\n  }\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "bee2fde5-976c-4161-b47c-25c31e8a1dcd",
+            "colId": "ad5be4c3-25d8-4743-b784-d5054745f09b",
+            "containerId": "a254f4fa-36ed-478f-b9a2-8a20bb4169ae",
+            "name": "get-types",
+            "url": "localhost:4000/tickets/types",
+            "method": "GET",
+            "sortNum": 100000,
+            "created": "2023-09-18T18:57:06.504Z",
+            "modified": "2023-09-18T18:58:40.128Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer {{token}}"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "92c78991-0198-426a-be72-223f597fa5bc",
+            "colId": "ad5be4c3-25d8-4743-b784-d5054745f09b",
+            "containerId": "a254f4fa-36ed-478f-b9a2-8a20bb4169ae",
+            "name": "get-ticket",
+            "url": "localhost:4000/tickets",
+            "method": "GET",
+            "sortNum": 110000,
+            "created": "2023-09-18T19:05:45.232Z",
+            "modified": "2023-09-18T19:06:11.414Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer {{token}}"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "31b7cd20-6532-4d23-9f6a-35db704148a6",
+            "colId": "ad5be4c3-25d8-4743-b784-d5054745f09b",
+            "containerId": "a254f4fa-36ed-478f-b9a2-8a20bb4169ae",
+            "name": "create-ticket",
+            "url": "localhost:4000/tickets",
+            "method": "POST",
+            "sortNum": 120000,
+            "created": "2023-09-18T19:07:38.083Z",
+            "modified": "2023-09-18T19:08:30.934Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "Bearer {{token}}"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"ticketTypeId\": 154\n}",
+                "form": []
+            },
+            "tests": []
+        }
+    ],
+    "settings": {
+        "envId": "8c30325c-387f-473b-925b-ace04abb7007"
+    }
+}

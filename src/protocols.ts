@@ -47,5 +47,8 @@ export type InputPaymentBody = {
   ticketId: number;
   cardData: CardPaymentParams;
 };
+export type BookingId = {
+  bookingId: number;
+};
 
 export type PaymentParams = Omit<Payment, 'id' | 'createdAt' | 'updatedAt'>;

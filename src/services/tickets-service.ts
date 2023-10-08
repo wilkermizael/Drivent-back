@@ -20,8 +20,8 @@ async function getTicketByUserId(userId: number) {
 
 async function createTicket(userId: number, ticketTypeId: number) {
   if (!ticketTypeId) throw invalidDataError('ticketTypeId');
-
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+  console.log(enrollment);
   if (!enrollment) throw notFoundError();
 
   const ticketData: CreateTicketParams = {

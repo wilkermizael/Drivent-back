@@ -21,7 +21,7 @@ async function createBooking(userId: number, roomId: number) {
     ticket.TicketType.isRemote === true ||
     ticket.TicketType.includesHotel === false
   ) {
-    throw notFoundError('O ticket dever ser pago, ser presencial e ter hotel cadastrado');
+    throw cannotReservation('O ticket dever ser pago, ser presencial e ter hotel cadastrado');
   }
   //QUARTO NÃO EXISTE LANÇA ERRO 404
   const room = await bookingRepository.findRoomById(roomId);
@@ -37,7 +37,7 @@ async function putBooking(userId: number, roomId: number, bookingId: number) {
   const room = await bookingRepository.findRoomById(roomId); // SE O QUARTO NÃO EXISTIR
   if (!room) throw notFoundError('Esse quarto não existe');
   const getReservation = await bookingRepository.getBooking(userId); //SE O USUÁRIO POSSUI RESERVA
-  if (!getReservation) throw notFoundError();
+  if (!getReservation) throw cannotReservation('Você não tem reserva');
   const booking = await bookingRepository.findBooking(roomId);
   if (booking === room.capacity) throw cannotReservation('Full capacity the room'); //CAPACIDADE DO QUARTO JA FOI ATINGIDA
   const result = await bookingRepository.putBooking(userId, roomId, bookingId);

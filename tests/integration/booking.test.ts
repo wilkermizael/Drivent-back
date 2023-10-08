@@ -38,7 +38,19 @@ describe('GET /booking', () => {
 
     expect(response.status).toBe(httpStatus.UNAUTHORIZED);
   });
+  it('User should have a booking', async () => {
+    const user = await createUser();
+    const token = await generateValidToken(user);
+    const enrollment = await createEnrollmentWithAddress(user);
+    const ticketType = await createTicketType(false, true);
+    const ticket = await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+    await createPayment(ticket.id, ticketType.price);
+    const hotel = await createHotel();
+    await createRoomWithHotelId(hotel.id);
 
+    const response = await server.get('/booking').set('Authorization', `Bearer ${token}`);
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+  });
   it('should respond with status 200 when booking is created', async () => {
     const user = await createUser();
     const token = await generateValidToken(user);

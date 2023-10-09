@@ -95,4 +95,21 @@ describe('GET /booking', () => {
       message: 'No result for this search!',
     });
   });
+  it('return error 403 when room does exist', async () => {
+    const roomId = 9999;
+    jest.spyOn(enrollmentRepository, 'findWithAddressByUserId').mockImplementationOnce((): any => {
+      return 1;
+    });
+    jest.spyOn(ticketsRepository, 'findTicketByEnrollmentId').mockImplementationOnce((): any => {
+      return 1;
+    });
+    jest.spyOn(bookingRepository, 'getBooking').mockImplementationOnce((): any => {
+      return undefined;
+    });
+    const promise = bookingService.getBooking(roomId);
+    expect(promise).rejects.toEqual({
+      name: 'NotFoundError',
+      message: 'No result for this search!',
+    });
+  });
 });

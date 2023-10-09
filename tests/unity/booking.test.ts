@@ -1,9 +1,7 @@
 import { faker } from '@faker-js/faker';
-import { createEnrollmentWithAddress, createUser } from '../factories';
 import { bookingRepository, enrollmentRepository, ticketsRepository } from '@/repositories';
 import { CreateBookingInput, ReservationInput } from '@/protocols';
 import { bookingService, enrollmentsService, ticketsService } from '@/services';
-import { generateValidToken } from '../helpers';
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -44,6 +42,8 @@ describe('GET /booking', () => {
       }),
     );
   });
+});
+describe('POST /booking', () => {
   it('should create a booking', async () => {
     const reservationInput: CreateBookingInput = {
       userId: faker.datatype.number({ min: 1, max: 5 }),
@@ -110,6 +110,41 @@ describe('GET /booking', () => {
     expect(promise).rejects.toEqual({
       name: 'NotFoundError',
       message: 'No result for this search!',
+    });
+  });
+});
+describe('PUT /booking/:bokkingId', () => {
+  it('return error 403 when room does exist', async () => {
+    const roomId = faker.datatype.number({ min: 1, max: 5 });
+    const userId = faker.datatype.number({ min: 1, max: 5 });
+    const bookingId = faker.datatype.number({ min: 1, max: 5 });
+    jest.spyOn(bookingRepository, 'findRoomById').mockImplementationOnce((): any => {
+      return undefined;
+    });
+    const promise = bookingService.putBooking(userId, roomId, bookingId);
+    expect(promise).rejects.toEqual({
+      name: 'NotFoundError',
+      message: 'Esse quarto não existe',
+    });
+  });
+  it('return message 403 when does not exist reservation', async () => {
+    const roomId = faker.datatype.number({ min: 1, max: 5 });
+    const userId = faker.datatype.number({ min: 1, max: 5 });
+    const bookingId = faker.datatype.number({ min: 1, max: 5 });
+
+    jest.spyOn(enrollmentRepository, 'findWithAddressByUserId').mockImplementationOnce((): any => {
+      return 1;
+    });
+    jest.spyOn(bookingRepository, 'findRoomById').mockImplementationOnce((): any => {
+      return 1;
+    });
+    jest.spyOn(bookingRepository, 'getBooking').mockImplementationOnce(() => undefined);
+
+    const promise = bookingService.putBooking(userId, roomId, bookingId);
+
+    await expect(promise).rejects.toEqual({
+      name: 'CannotReservation',
+      message: 'Você não tem reserva',
     });
   });
 });

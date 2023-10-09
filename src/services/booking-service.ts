@@ -11,7 +11,6 @@ async function getBooking(userId: number) {
 async function createBooking(userId: number, roomId: number) {
   if (!roomId || isNaN(roomId)) throw invalidDataError('roomId');
   //REGRAS DE NEGÓCIO: TICKET PAGO, SER PRESENCIAL, INCLUIR HOTEL
-  console.log(userId, roomId);
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
   if (!enrollment) throw enrollmentNotFoundError();
   const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);

@@ -1,7 +1,9 @@
 import { faker } from '@faker-js/faker';
-import { bookingRepository, enrollmentRepository } from '@/repositories';
+import { createEnrollmentWithAddress, createUser } from '../factories';
+import { bookingRepository, enrollmentRepository, ticketsRepository } from '@/repositories';
 import { CreateBookingInput, ReservationInput } from '@/protocols';
-import { bookingService } from '@/services';
+import { bookingService, enrollmentsService, ticketsService } from '@/services';
+import { generateValidToken } from '../helpers';
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -66,5 +68,31 @@ describe('GET /booking', () => {
         message: 'User is not enrolled in the event.',
       });
     }
+  });
+  it('return error 403 when enrollment does exist', async () => {
+    const userId = 99999;
+    jest.spyOn(enrollmentRepository, 'findWithAddressByUserId').mockImplementationOnce((): any => {
+      return undefined;
+    });
+    const promise = enrollmentsService.getOneWithAddressByUserId(userId);
+
+    expect(promise).rejects.toEqual({
+      name: 'EnrollmentNotFoundError',
+      message: 'User is not enrolled in the event.',
+    });
+  });
+  it('return error 403 when ticket does exist', async () => {
+    const userId = 9999;
+    jest.spyOn(enrollmentRepository, 'findWithAddressByUserId').mockImplementationOnce((): any => {
+      return 1;
+    });
+    jest.spyOn(ticketsRepository, 'findTicketByEnrollmentId').mockImplementationOnce((): any => {
+      return undefined;
+    });
+    const promise = ticketsService.getTicketByUserId(userId);
+    expect(promise).rejects.toEqual({
+      name: 'NotFoundError',
+      message: 'No result for this search!',
+    });
   });
 });

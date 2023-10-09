@@ -28,7 +28,7 @@ async function createBooking(userId: number, roomId: number) {
     select: { id: true },
   });
   const booking = { bookingId: result.id };
-  return booking.bookingId;
+  return booking;
 }
 async function findRoomById(roomId: number) {
   const result = await prisma.room.findUnique({

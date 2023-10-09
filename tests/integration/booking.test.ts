@@ -12,6 +12,7 @@ import {
   createUser,
 } from '../factories';
 import { createHotel, createRoomWithHotelId } from '../factories/hotels-factory';
+import { prisma } from '@/config';
 import app, { init } from '@/app';
 
 beforeAll(async () => {
@@ -63,7 +64,6 @@ describe('GET /booking', () => {
     const booking = await createBooking(user.id, room.id);
 
     const response = await server.get('/booking').set('Authorization', `Bearer ${token}`);
-    console.log(response.body);
     expect(response.status).toEqual(httpStatus.OK);
     expect(response.body).toEqual(
       expect.objectContaining({
@@ -78,5 +78,21 @@ describe('GET /booking', () => {
         },
       }),
     );
+  });
+});
+describe('POST /booking', () => {
+  it('should be create a reservation', async () => {
+    const user = await createUser();
+    const token = await generateValidToken(user);
+    const enrollment = await createEnrollmentWithAddress(user);
+    const ticketType = await createTicketType(false, true);
+    await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+    const hotel = await createHotel();
+    const createRoom = await createRoomWithHotelId(hotel.id);
+    const roomId = { roomId: createRoom.id };
+
+    const response = await server.post('/booking').set('Authorization', `Bearer ${token}`).send(roomId);
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.body).toEqual({ bookingId: expect.any(Number) });
   });
 });

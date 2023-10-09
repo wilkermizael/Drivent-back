@@ -23,7 +23,23 @@ beforeEach(async () => {
 });
 
 const server = supertest(app);
-
+async function fullCapacityOfTheRoom() {
+  const hotel = await createHotel();
+  const createRoom = await createRoomWithHotelId(hotel.id);
+  let contador = createRoom.capacity;
+  const roomId = { roomId: createRoom.id };
+  while (contador > 0) {
+    const user = await createUser();
+    const token = await generateValidToken(user);
+    const enrollment = await createEnrollmentWithAddress(user);
+    const ticketType = await createTicketType(false, true);
+    await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+    await server.post('/booking').set('Authorization', `Bearer ${token}`).send(roomId);
+    const response = await server.post('/booking').set('Authorization', `Bearer ${token}`).send(roomId);
+    expect(response.status).toBe(httpStatus.FORBIDDEN);
+    contador = contador - 1;
+  }
+}
 describe('GET /booking', () => {
   it('should respond with status 401 if no token is given', async () => {
     const response = await server.get('/booking');
@@ -80,7 +96,25 @@ describe('GET /booking', () => {
   });
 });
 describe('POST /booking', () => {
-  it('should response with status 400 when roomId does not exist', async () => {
+  it('show be response with status 403 when the room reaches its maximum capacity ', async () => {
+    return await fullCapacityOfTheRoom();
+  });
+  it('should response with status 200 when create a reservation and return bookingId', async () => {
+    const user = await createUser();
+    const token = await generateValidToken(user);
+    const enrollment = await createEnrollmentWithAddress(user);
+    const ticketType = await createTicketType(false, true);
+    await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+    const hotel = await createHotel();
+    const createRoom = await createRoomWithHotelId(hotel.id);
+    const roomId = { roomId: createRoom.id };
+
+    const response = await server.post('/booking').set('Authorization', `Bearer ${token}`).send(roomId);
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.body).toEqual({ bookingId: expect.any(Number) });
+  });
+
+  it('should response with status 404 when roomId does not exist', async () => {
     const user = await createUser();
     const token = await generateValidToken(user);
     const enrollment = await createEnrollmentWithAddress(user);

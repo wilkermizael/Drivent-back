@@ -50,5 +50,11 @@ export type InputPaymentBody = {
 export type BookingId = {
   bookingId: number;
 };
-
+export type ReservationInput = {
+  userId: number;
+};
+export type CreateBookingInput = {
+  userId: number;
+  roomId: number;
+};
 export type PaymentParams = Omit<Payment, 'id' | 'createdAt' | 'updatedAt'>;

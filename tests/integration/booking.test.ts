@@ -12,7 +12,6 @@ import {
   createUser,
 } from '../factories';
 import { createHotel, createRoomWithHotelId } from '../factories/hotels-factory';
-import { prisma } from '@/config';
 import app, { init } from '@/app';
 
 beforeAll(async () => {
@@ -81,7 +80,19 @@ describe('GET /booking', () => {
   });
 });
 describe('POST /booking', () => {
-  it('should be create a reservation', async () => {
+  it('should response with status 400 when roomId does not exist', async () => {
+    const user = await createUser();
+    const token = await generateValidToken(user);
+    const enrollment = await createEnrollmentWithAddress(user);
+    const ticketType = await createTicketType(false, true);
+    await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+    await createHotel();
+    const roomId = { roomId: 999999 };
+
+    const response = await server.post('/booking').set('Authorization', `Bearer ${token}`).send(roomId);
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+  });
+  it('should response with status 200 when create a reservation and return bookingId', async () => {
     const user = await createUser();
     const token = await generateValidToken(user);
     const enrollment = await createEnrollmentWithAddress(user);
